@@ -51,66 +51,19 @@ def handle_message(event):
     template=CarouselTemplate(
         columns=[
             CarouselColumn(
-                    thumbnail_image_url='https://i.imgur.com/PN23ONG.png',
-                    title='選擇服務',
-                    text='請選擇',
-                    actions=[
-                        MessageAction(
-                            label='開始玩',
-                            text='開始玩'
-                        ),
-                        URIAction(
-                            label='韓團 SISTAR',
-                            uri='https://www.youtube.com/watch?v=E0ZHXVp_wUE'
-                        ),
-                        URIAction(
-                            label='粉絲團',
-                            uri='https://www.facebook.com/mengno.1/'
-                        )
-                    ]
-                ),
-            CarouselColumn(
-                    thumbnail_image_url='https://i.imgur.com/DrsmtKS.jpg',
-                    title='選擇服務',
-                    text='請選擇',
-                    actions=[
-                        MessageAction(
-                            label='other bot',
-                            text='imgur bot'
-                        ),
-                        MessageAction(
-                            label='油價查詢',
-                            text='油價查詢'
-                        ),
-                        URIAction(
-                            label='聯絡作者',
-                            uri='https://ptt-beauty-infinite-scroll.herokuapp.com/'
-                        )
-                    ]
-                ),
-                CarouselColumn(
-                    thumbnail_image_url='https://i.imgur.com/h4UzRit.jpg',
-                    title='選擇服務',
-                    text='請選擇',
-                    actions=[
-                        URIAction(
-                            label='分享 bot',
-                            uri='https://ptt-beauty-infinite-scroll.herokuapp.com/'
-                        ),
-                        URIAction(
-                            label='PTT正妹網',
-                            uri='https://ptt-beauty-infinite-scroll.herokuapp.com/'
-                        ),
-                        URIAction(
-                            label='youtube 程式教學分享頻道',
-                            uri='https://ptt-beauty-infinite-scroll.herokuapp.com/'
-                        )
-                    ]
-                )
-            ]
-        )
+                thumbnail_image_url='https://i.imgur.com/PN23ONG.png',
+                title='選擇服務',
+                text='請選擇',
+                actions=[
+                    MessageAction(
+                        label='開始玩',
+                        text='開始玩'
+                    )
+                ]
+            )
+        ]
     )
-
+    )        
     line_bot_api.reply_message(
         event.reply_token,
         message)
