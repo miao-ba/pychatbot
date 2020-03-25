@@ -1,3 +1,5 @@
+import requests
+from bs4 import BeautifulSoup
 from flask import Flask,request,abort
 from linebot import (LineBotApi,WebhookHandler)
 from linebot.exceptions import(InvalidSignatureError)
@@ -15,8 +17,51 @@ def callback():
     except InvalidSignatureError:
         abort(400)
     return "ok"
+def apple_news():
+    target_url = 'https://tw.appledaily.com/new/realtime'
+    print('Start parsing appleNews....')
+    rs = requests.session()
+    res = rs.get(target_url, verify=False)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    content = ""
+    for index, data in enumerate(soup.select('.rtddt a'), 0):
+        if index == 5:
+            return content
+        link = data['href']
+        content += '{}\n\n'.format(link)
+    return content
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    if event.message.text == "蘋果即時新聞":
+        content = apple_news()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+    if event.message.text == "新聞":
+        buttons_template = TemplateSendMessage(
+            alt_text='新聞 template',
+            template=ButtonsTemplate(
+                title='新聞類型',
+                text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/vkqbLnz.png',
+                actions=[
+                    MessageTemplateAction(
+                        label='蘋果即時新聞',
+                        text='蘋果即時新聞'
+                    ),
+                    MessageTemplateAction(
+                        label='科技新報',
+                        text='科技新報'
+                    ),
+                    MessageTemplateAction(
+                        label='PanX泛科技',
+                        text='PanX泛科技'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
     if event.message.text == "開始玩":
         buttons_template = TemplateSendMessage(
             alt_text='開始玩 template',
