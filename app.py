@@ -63,7 +63,86 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
     if event.message.text == "開始玩":
-        buttons_template = TemplateSendMessage(
+        buttons_template = [
+            TemplateSendMessage(
+            alt_text='開始玩 template',
+            template=ButtonsTemplate(
+                title='選擇服務',
+                text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/xQF5dZT.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='新聞',
+                        text='新聞'
+                    ),
+                    MessageTemplateAction(
+                        label='電影',
+                        text='電影'
+                    ),
+                    MessageTemplateAction(
+                        label='看廢文',
+                        text='看廢文'
+                    ),
+                    MessageTemplateAction(
+                        label='正妹',
+                        text='正妹'
+                    )
+                ]
+            )
+        ),
+        TemplateSendMessage(
+            alt_text='開始玩 template',
+            template=ButtonsTemplate(
+                title='選擇服務',
+                text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/xQF5dZT.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='新聞',
+                        text='新聞'
+                    ),
+                    MessageTemplateAction(
+                        label='電影',
+                        text='電影'
+                    ),
+                    MessageTemplateAction(
+                        label='看廢文',
+                        text='看廢文'
+                    ),
+                    MessageTemplateAction(
+                        label='正妹',
+                        text='正妹'
+                    )
+                ]
+            )
+        ),
+        TemplateSendMessage(
+            alt_text='開始玩 template',
+            template=ButtonsTemplate(
+                title='選擇服務',
+                text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/xQF5dZT.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='新聞',
+                        text='新聞'
+                    ),
+                    MessageTemplateAction(
+                        label='電影',
+                        text='電影'
+                    ),
+                    MessageTemplateAction(
+                        label='看廢文',
+                        text='看廢文'
+                    ),
+                    MessageTemplateAction(
+                        label='正妹',
+                        text='正妹'
+                    )
+                ]
+            )
+        ),
+        TemplateSendMessage(
             alt_text='開始玩 template',
             template=ButtonsTemplate(
                 title='選擇服務',
@@ -89,6 +168,7 @@ def handle_message(event):
                 ]
             )
         )
+        ]
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
     message = TemplateSendMessage(
