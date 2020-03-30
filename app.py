@@ -84,6 +84,20 @@ def movie():
         link = "http://www.atmovies.com.tw" + data['href']
         content += '{}\n{}\n'.format(title, link)
     return content
+def ptt_hot():
+    target_url = 'http://disp.cc/b/PttHot'
+    print('Start parsing pttHot....')
+    rs = requests.session()
+    res = rs.get(target_url, verify=False)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    content = ""
+    for data in soup.select('#list div.row2 div span.listTitle'):
+        title = data.text
+        link = "http://disp.cc/b/" + data.find('a')['href']
+        if data.find('a')['href'] == "796-59l9":
+            break
+        content += '{}\n{}\n\n'.format(title, link)
+    return content
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == "蘋果即時新聞":
@@ -120,6 +134,12 @@ def handle_message(event):
                 TextSendMessage(text=seqs[random.randint(0, len(seqs) - 1)]),
                 TextSendMessage(text=seqs[random.randint(0, len(seqs) - 1)])
             ])
+        return 0
+    if event.message.text == "近期熱門廢文":
+        content = ptt_hot()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
         return 0
     if event.message.text == "開始玩":
         buttons_template = [
@@ -188,6 +208,27 @@ def handle_message(event):
                     MessageTemplateAction(
                         label='觸電網-youtube',
                         text='觸電網-youtube'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
+    if event.message.text == "看廢文":
+        buttons_template = TemplateSendMessage(
+            alt_text='看廢文 template',
+            template=ButtonsTemplate(
+                title='你媽知道你在看廢文嗎',
+                text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/ocmxAdS.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='近期熱門廢文',
+                        text='近期熱門廢文'
+                    ),
+                    MessageTemplateAction(
+                        label='即時廢文',
+                        text='即時廢文'
                     )
                 ]
             )
