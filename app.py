@@ -1,4 +1,5 @@
 import requests
+import random
 from bs4 import BeautifulSoup
 from flask import Flask,request,abort
 from linebot import (LineBotApi,WebhookHandler)
@@ -67,6 +68,21 @@ def oil_price():
     gas_price = soup.select('#gas-price')[0].text.replace('\n\n\n', '').replace(' ', '')
     cpc = soup.select('#cpc')[0].text.replace(' ', '')
     content = '{}\n{}{}'.format(title, gas_price, cpc)
+    return content
+def movie():
+    target_url = 'http://www.atmovies.com.tw/movie/next/0/'
+    print('Start parsing movie ...')
+    rs = requests.session()
+    res = rs.get(target_url, verify=False)
+    res.encoding = 'utf-8'
+    soup = BeautifulSoup(res.text, 'html.parser')
+    content = ""
+    for index, data in enumerate(soup.select('ul.filmNextListAll a')):
+        if index == 20:
+            return content
+        title = data.text.replace('\t', '').replace('\r', '')
+        link = "http://www.atmovies.com.tw" + data['href']
+        content += '{}\n{}\n'.format(title, link)
     return content
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
