@@ -192,6 +192,7 @@ def handle_message(event):
                 ]
             )
         )
+        return 0
     if event.message.text == "油價查詢":
         content = oil_price()
         line_bot_api.reply_message(
