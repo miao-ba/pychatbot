@@ -37,6 +37,18 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
+    if event.message.text == "科技新報":
+        content = technews()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
+    if event.message.text == "PanX泛科技":
+        content = panx()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
     if event.message.text == "新聞":
         buttons_template = TemplateSendMessage(
             alt_text='新聞 template',
