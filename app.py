@@ -58,7 +58,16 @@ def panx():
         link = data['href']
         content += '{}\n{}\n\n'.format(title, link)
     return content
-
+def oil_price():
+    target_url = 'https://gas.goodlife.tw/'
+    rs = requests.session()
+    res = rs.get(target_url, verify=False)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    title = soup.select('#main')[0].text.replace('\n', '').split('(')[0]
+    gas_price = soup.select('#gas-price')[0].text.replace('\n\n\n', '').replace(' ', '')
+    cpc = soup.select('#cpc')[0].text.replace(' ', '')
+    content = '{}\n{}{}'.format(title, gas_price, cpc)
+    return content
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == "蘋果即時新聞":
@@ -77,6 +86,24 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
+        return 0
+    if event.message.text == "近期上映電影":
+        content = movie()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
+    if event.message.text == "觸電網-youtube":
+        target_url = 'https://www.youtube.com/user/truemovie1/videos'
+        rs = requests.session()
+        res = rs.get(target_url, verify=False)
+        soup = BeautifulSoup(res.text, 'html.parser')
+        seqs = ['https://www.youtube.com{}'.format(data.find('a')['href']) for data in soup.select('.yt-lockup-title')]
+        line_bot_api.reply_message(
+            event.reply_token, [
+                TextSendMessage(text=seqs[random.randint(0, len(seqs) - 1)]),
+                TextSendMessage(text=seqs[random.randint(0, len(seqs) - 1)])
+            ])
         return 0
     if event.message.text == "新聞":
         buttons_template = TemplateSendMessage(
@@ -103,6 +130,29 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
+    if event.message.text == "電影":
+        buttons_template = TemplateSendMessage(
+            alt_text='電影 template',
+            template=ButtonsTemplate(
+                title='服務類型',
+                text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/sbOTJt4.png',
+                actions=[
+                    MessageTemplateAction(
+                        label='近期上映電影',
+                        text='近期上映電影'
+                    ),
+                    MessageTemplateAction(
+                        label='eyny',
+                        text='eyny'
+                    ),
+                    MessageTemplateAction(
+                        label='觸電網-youtube',
+                        text='觸電網-youtube'
+                    )
+                ]
+            )
+        )
     if event.message.text == "開始玩":
         buttons_template = [
             TemplateSendMessage(
@@ -134,6 +184,12 @@ def handle_message(event):
         ]
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
+    if event.message.text == "油價查詢":
+        content = oil_price()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
     message = TemplateSendMessage(
     alt_text='目錄 template',
     template=CarouselTemplate(
@@ -146,6 +202,10 @@ def handle_message(event):
                     MessageAction(
                         label='開始玩',
                         text='開始玩'
+                    ),
+                    MessageAction(
+                        label='油價查詢',
+                        text='油價查詢'
                     )
                 ]
             )
