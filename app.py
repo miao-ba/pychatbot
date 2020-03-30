@@ -186,14 +186,6 @@ def handle_message(event):
                 thumbnail_image_url='https://i.imgur.com/sbOTJt4.png',
                 actions=[
                     MessageTemplateAction(
-                        label='近期上映電影',
-                        text='近期上映電影'
-                    ),
-                    MessageTemplateAction(
-                        label='eyny',
-                        text='eyny'
-                    ),
-                    MessageTemplateAction(
                         label='觸電網-youtube',
                         text='觸電網-youtube'
                     )
